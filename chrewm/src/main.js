@@ -10,14 +10,14 @@ var terms = Object.keys(dictionary).join("|");
 var regEx = new RegExp("(\\W)(" + terms + ")(s|ed|ing|)(\\W)","g");
 
 var chrewmerise = function(s) {
-  return s.replace(regEx, function(match, p1, p2, p3, p4) {
-    return p1 + dictionary[p2] + p3 + p4;
-  })
-  .replace(/ing\b/g, 'un') // *ing > *un
+  return s.replace(/ing\b/g, 'un') // *ing > *un
   .replace(/(\w)(one)\b/g, '$1ewn') // *one > *ewn - dodgy?
   .replace(/own\b/g, 'ewn') // *own > *ewn
   .replace(/ose\b/g, 'ews') // *ose > *ews
-  .replace(/iew\b/g, 'ew'); // *iew > *ew
+  .replace(/iew\b/g, 'ew') // *iew > *ew
+  .replace(regEx, function(match, p1, p2, p3, p4) {
+    return p1 + dictionary[p2] + p3 + p4;
+  }) // swap all dictionary stuff after general stuff
 };
 
 var observer = new MutationObserver(function(mutations) {
