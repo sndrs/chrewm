@@ -16,11 +16,11 @@ var chrewmerise = function(s) {
   return s.replace(regEx, function(match, p1, p2, p3, p4) {
     return p1 + dictionary[p2] + p3 + p4;
   })
-  .replace(/ing\b/g, 'un')
-  .replace(/(\w)(one)\b/g, '$1ewn')
-  .replace(/own\b/g, 'ewn')
-  .replace(/ose\b/g, 'ews')
-  .replace(/iew\b/g, 'ew');
+  .replace(/ing\b/g, 'un') // *ing > *un
+  .replace(/(\w)(one)\b/g, '$1ewn') // *one > *ewn - dodgy?
+  .replace(/own\b/g, 'ewn') // *own > *ewn
+  .replace(/ose\b/g, 'ews') // *ose > *ews
+  .replace(/iew\b/g, 'ew'); // *iew > *ew
 };
 
 var observer = new MutationObserver(function(mutations) {
