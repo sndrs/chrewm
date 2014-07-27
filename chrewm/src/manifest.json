@@ -1,0 +1,15 @@
+{
+  "name": "Chrewm",
+  "version": "0.1.0",
+  "description": "Read like you're in Norfolk.",
+  "default_locale": "en",
+  "author": "Alex Sanders",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*"],
+      "js": ["main.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "manifest_version": 2
+}
