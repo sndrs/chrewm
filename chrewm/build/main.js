@@ -4,40 +4,53 @@ module.exports={"A lot":"A sight","Absolutely":"Hoolly","Across":"Acrorst","Advi
 /* jshint strict: false */
 /* global document: false */
 /* global require: false */
+/* global MutationObserver: false */
 
 'use strict';
 
-var dictionary = require('./_dictionary');
+(function(){
+  var transforms = require('../transforms');
+  var dictionary = require('./_dictionary');
 
-var terms = Object.keys(dictionary).join("|");
-var regEx = new RegExp("(\\W)(" + terms + ")(s|ed|ing|)(\\W)","g");
+  function chrewmerise(s) {
+    // generic transforms
+    Object.keys(transforms).forEach(function(transform) {
+      s = s.replace(new RegExp(transform, 'g'), transforms[transform]);
+    });
 
-var chrewmerise = function(s) {
-  return s.replace(/ing\b/g, 'un') // *ing > *un
-  .replace(/(\w)(one)\b/g, '$1ewn') // *one > *ewn - dodgy?
-  .replace(/own\b/g, 'ewn') // *own > *ewn
-  .replace(/ose\b/g, 'ews') // *ose > *ews
-  .replace(/iew\b/g, 'ew') // *iew > *ew
-  .replace(regEx, function(match, p1, p2, p3, p4) {
-    return p1 + dictionary[p2] + p3 + p4;
-  }) // swap all dictionary stuff after general stuff
-};
+    // swap all dictionary stuff after generic transforms
+    var regEx = new RegExp("(\\W)(" + Object.keys(dictionary).join("|") + ")(s|ed|ing|)(\\W)", "g");
+    return s.replace(regEx, function(match, p1, p2, p3, p4) {
+      return p1 + dictionary[p2] + p3 + p4;
+    });
+  }
 
-var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    if(mutation.addedNodes) {
-      Array.prototype.forEach.call(mutation.addedNodes, function(node) {
-        if(node.data && node.parentNode.nodeName !== 'STYLE' && node.parentNode.nodeName !== 'SCRIPT') {
-          node.data = chrewmerise(node.data);
-        }
-      })
-    }
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if(mutation.addedNodes) {
+        Array.prototype.forEach.call(mutation.addedNodes, function(node) {
+          if(node.data && node.parentNode.nodeName !== 'STYLE' && node.parentNode.nodeName !== 'SCRIPT') {
+            node.data = chrewmerise(node.data);
+          }
+        });
+      }
+    });
   });
-});
 
-observer.observe(document, {
-  characterData: true,
-  subtree: true,
-  childList: true
-});
-},{"./_dictionary":1}]},{},[2])
+  observer.observe(document, {
+    characterData: true,
+    subtree: true,
+    childList: true
+  });
+})();
+
+},{"../transforms":3,"./_dictionary":1}],3:[function(require,module,exports){
+// n.b. regexs in the key must be escaped
+module.exports = {
+  "ing\\b": "un", // *ing > *un
+  "(\\w)(one)\\b": "$1ewn", // *one > *ewn - dodgy?
+  "own\\b": "ewn", // *own > *ewn
+  "ose\\b": "ews", // *ose > *ews
+  "iew\\b": "ew" // *iew > *ew
+}
+},{}]},{},[2])

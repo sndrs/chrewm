@@ -37,7 +37,10 @@ gulp.task('watch', ['js', 'copy'], function(){
 })
 
 gulp.task('copy', function(){
-  return gulp.src('src/manifest.json')
+  return gulp.src([
+      'src/manifest.json',
+      'src/icon.png'
+    ])
     .pipe(gulp.dest('build'))
 })
 

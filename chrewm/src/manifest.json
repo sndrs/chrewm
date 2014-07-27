@@ -1,9 +1,13 @@
 {
   "name": "Chrewm",
   "version": "0.1.0",
-  "description": "Read like you're in Norfolk.",
-  "default_locale": "en",
+  "description": "Talk Norfolk.",
   "author": "Alex Sanders",
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "128": "icon.png"
+  },
   "content_scripts": [
     {
       "matches": ["http://*/*"],
